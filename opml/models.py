@@ -13,6 +13,16 @@ class Version(enum.Enum):
     VERSION11 = "1.1"
     VERSION2 = "2.0"
 
+    @staticmethod
+    def from_version(version: str):
+        if version == "1.0":
+            return Version.VERSION1
+        elif version == "1.1":
+            return Version.VERSION1
+        elif version == "2.0":
+            return Version.VERSION2
+        raise Exception()
+
 
 DOCS = {
     Version.VERSION1: "http://2005.opml.org/spec1.html",
@@ -30,7 +40,7 @@ class Head(BaseModel):
     owner_id: Optional[HttpUrl] = None
     docs: Optional[HttpUrl] = None
     expansion_state: List[int] = []
-    vertScrollState: Optional[int] = None
+    vert_scroll_state: Optional[int] = None
     window_top: Optional[int] = None
     window_left: Optional[int] = None
     window_bottom: Optional[int] = None
@@ -39,7 +49,12 @@ class Head(BaseModel):
 
 class Outline(BaseModel):
     sub_outlines: List[Outline] = []
+    text: str
     attributes: Dict[str, Any]
+
+    @staticmethod
+    def rss(text: str, xml_url: str):
+        return Outline(text=text, attributes={"type": "rss", "xmlUrl": xml_url})
 
 
 Outline.update_forward_refs()

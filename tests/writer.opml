@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>opml Test Suite</title>
+    <dateModified>Mon, 17 Jul 2006 00:00:00 UTC</dateModified>
+    <ownerName>David Buckley</ownerName>
+  </head>
+  <body>
+<outline text="Headers">
+  <outline text="Level 2">
+    <outline text="Level 3">
+      <outline text="Level 4">
+        <outline text="Level 5">
+        </outline>
+      </outline>
+    </outline>
+  </outline>
+</outline>
+  </body>
+</opml>

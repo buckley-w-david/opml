@@ -25,7 +25,9 @@ def convert_value(value: Any):
 
 
 def write_outline(parent, outline):
-    outline_node = etree.Element("outline")
+    outline_node = etree.SubElement(parent, "outline")
+
+    outline_node.set('text', outline.text)
     for k, v in outline.attributes.items():
         outline_node.set(k, convert_value(v))
     for sub_outline in outline.sub_outlines:
@@ -35,16 +37,14 @@ def write_outline(parent, outline):
 
 def write(file: Union[Path, str, BinaryIO], opml: Opml):
     root = etree.Element("opml", version=opml.version.value)
-    head = etree.Element("head")
+    head = etree.SubElement(root, "head")
     for k, v in opml.head.dict().items():
         if v is not None and v != []:
-            head.set(to_camel_case(k), convert_value(v))
-    root.append(head)
+            etree.SubElement(head, to_camel_case(k)).text = convert_value(v)
 
-    body = etree.Element("body")
+    body = etree.SubElement(root, "body")
     for outline in opml.body.outlines:
         write_outline(body, outline)
-    root.append(body)
 
     et = etree.ElementTree(root)
-    et.write(file, xml_declaration=True, encoding='UTF-8')
+    et.write(file, xml_declaration=True, encoding="UTF-8")
