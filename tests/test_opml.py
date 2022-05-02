@@ -1,15 +1,10 @@
 from datetime import datetime
 import io
-from pathlib import Path
 
 from opml import __version__
 from opml.models import Opml, Head, Body, Version, Outline
 from opml import writer
 from opml import reader
-
-
-def test_version():
-    assert __version__ == '0.1.0'
 
 def test_writer():
     opml = Opml(

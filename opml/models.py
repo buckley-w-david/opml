@@ -5,8 +5,7 @@ import enum
 
 from typing import Optional, List, Dict, Any
 
-from pydantic import BaseModel, EmailStr, HttpUrl
-
+from dataclasses import dataclass, asdict, field
 
 class Version(enum.Enum):
     VERSION1 = "1.0"
@@ -31,40 +30,52 @@ DOCS = {
 }
 
 
-class Head(BaseModel):
+@dataclass
+class Head:
     title: Optional[str] = None
     date_created: Optional[datetime] = None
     date_modified: Optional[datetime] = None
     owner_name: Optional[str] = None
-    owner_email: Optional[EmailStr] = None
-    owner_id: Optional[HttpUrl] = None
-    docs: Optional[HttpUrl] = None
-    expansion_state: List[int] = []
+    owner_email: Optional[str] = None
+    owner_id: Optional[str] = None
+    docs: Optional[str] = None
+    expansion_state: List[int] = field(default_factory=list)
     vert_scroll_state: Optional[int] = None
     window_top: Optional[int] = None
     window_left: Optional[int] = None
     window_bottom: Optional[int] = None
     window_right: Optional[int] = None
 
+    def dict(self):
+        return asdict(self)
 
-class Outline(BaseModel):
-    sub_outlines: List[Outline] = []
+
+@dataclass
+class Outline:
     text: str
     attributes: Dict[str, Any]
+    sub_outlines: List['Outline'] = field(default_factory=list)
 
     @staticmethod
     def rss(text: str, xml_url: str):
         return Outline(text=text, attributes={"type": "rss", "xmlUrl": xml_url})
 
+    def dict(self):
+        return asdict(self)
 
-Outline.update_forward_refs()
-
-
-class Body(BaseModel):
+@dataclass
+class Body:
     outlines: List[Outline]
 
+    def dict(self):
+        return asdict(self)
 
-class Opml(BaseModel):
+
+@dataclass
+class Opml:
     version: Version
     head: Head
     body: Body
+
+    def dict(self):
+        return asdict(self)

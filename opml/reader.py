@@ -1,8 +1,7 @@
 import email.utils
 from datetime import datetime
 from pathlib import Path
-from time import mktime
-from typing import Any, Union, BinaryIO
+from typing import Union, BinaryIO
 
 from lxml import etree
 
@@ -31,7 +30,7 @@ def find_text(node, element):
 
 def parse_head(head_node):
     dc = email.utils.parsedate(find_text(head_node, "dateCreated"))
-    head_date_created = datetime(*dv[:7]) if dc else None
+    head_date_created = datetime(*dc[:7]) if dc else None
 
     dm = email.utils.parsedate(find_text(head_node, "dateModified"))
     head_date_modified = datetime(*dm[:7]) if dm else None
