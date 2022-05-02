@@ -34,8 +34,7 @@ def write_outline(parent, outline):
         write_outline(outline_node, sub_outline)
     parent.append(outline_node)
 
-
-def write(file: Union[Path, str, BinaryIO], opml: Opml):
+def serialize(opml: Opml):
     root = etree.Element("opml", version=opml.version.value)
     head = etree.SubElement(root, "head")
     for k, v in opml.head.dict().items():
@@ -46,5 +45,8 @@ def write(file: Union[Path, str, BinaryIO], opml: Opml):
     for outline in opml.body.outlines:
         write_outline(body, outline)
 
-    et = etree.ElementTree(root)
+    return etree.ElementTree(root)
+
+def write(file: Union[Path, str, BinaryIO], opml: Opml):
+    et = serialize(opml)
     et.write(file, xml_declaration=True, encoding="UTF-8")
